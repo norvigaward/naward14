@@ -37,16 +37,22 @@ Detecting the language was done by making use of the [java language classifier l
 
 #### Removing Duplicates and Gathering Address Information
 
-In the Reducer all information for a Bitcoin address is gathered and duplicates are removed. Now more information is extracted for the bitcoin address itself in the reducer. We used several  blockchain.info web services to extract additional information from the bitcoin addresses for which they provided us with an API key to avoid the request limit. The following web services are used to retrieve more information on balance and incoming/outgoing transactions:
+In the Reducer all information for a single Bitcoin address is gathered and duplicate addresses are removed. Now more information is extracted for the bitcoin address itself in the reducer. We used several blockchain.info web services to extract additional information from the bitcoin addresses. For this they have kindly provided us with an API key to avoid the request limit. The following web services are used to retrieve more information on balance and the amount of sent and received bitcoins:
 Balance: “https://blockchain.info/q/addressbalance/<bitcoin address>” 
 Outgoing transactions: “https://blockchain.info/q/getsentbyaddress/<bitcoin address>”
 Incoming transactions: “https://blockchain.info/q/getrecievedbyaddress/<bitcoin address>”
 
-Finally every bitcoin address and the extracted information is written to a json object by the Reducer to allow for easy further usage in Javascript. 
+Finally every bitcoin address and the extracted information is written to a json object by the Reducer to allow for easy further usage by our Javascript visualization. 
 
-As a final step we want to visualise the information that  was extracted. Because we wanted to visualize the information by country and by language the resulting json file was parsed using a python script. The final merged output file from the mapreduce application was small enough to allow for processing on a single PC. Using python we generated two new json files: one containing information on a country basis and the other on a language basis. 
+#### Visualizing Results
 
-We used the d3 (Data-driven Documents) [5] Javascript library to visualise the country and language data. The country data was visualized by coloring a world map according to one of the properties (balance, incoming transactions, outgoing transactions) which could be set using a drop down menu. The relative amount is then indicated by coloring the country using a gradient single color scale. The language information was visualized using pie chart. The pie chart also uses a dropdown menu to select the property to be visualized. The colored world map was made full screen and is pannable and zoomable. Over this map the pie chart was superimposed in order to show all the information at once in an integrated interface.
+##### Postprocessing the Hadoop job output
+
+As a final step we want to visualise the information that was extracted by the hadoop job. Because we wanted to visualize the information by country and by language the resulting json file was parsed using a python script. The final merged output file from the mapreduce application was small enough to allow for postprocessing on a single PC. Using a python script we generated two new json files: one containing information on a country basis and the other on a language basis. The python script computed for each country and language the total and relative amount of bitcoins owned, sent and received, as well as the total amount of bitcoins owned, sent and received worldwide amongst all crawled addresses.
+
+##### Visualising on a World Map
+
+We used the [d3 (Data-driven Documents)](http://d3js.org/) Javascript library to visualise the country and language data. The country data was visualized by coloring a world map which was drawn using the [topojson](https://github.com/mbostock/topojson) library according to one of the properties (balance, incoming transactions, outgoing transactions) which can be selected using a drop down menu. The relative amount is then indicated by coloring the country using a gradient multiple color scale. The language information is visualised in a pie chart. The pie chart also uses a dropdown menu to select the property to be visualized. The colored world map was made to show in full screen and is pannable as well as zoomable. Over this map the pie chart was superimposed in order to show all the information at once in an integrated interface.
 
 ### Results
 
