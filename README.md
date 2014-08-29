@@ -56,11 +56,23 @@ We used the [d3 (Data-driven Documents)](http://d3js.org/) Javascript library to
 
 ### Results
 
-Our final visualization can be found at the following webpage: http://naward14.uphero.com/ (sorry for the ad!).
+Our final visualisation can be found at the following webpage: http://naward14.uphero.com/ (sorry for the advertisement due to free hosting!). This visualisation is interactive so you can move the world map around, zoom in and change the the values that are used for coloring the map by using the dropdown at the top (this will cause the legend to change accordingly). Using the toggle button at the bottom you can view the bitcoin balance distribution per language as well. 
 
 ### Discussion
 
-### Future Work
+At the time of writing this discussion we only have the results from a stripped run that consisted of 503 found bitcoin addresses to which a country could be attributed. This stripped run also did not retrieve the amount of sent and received bitcoins per country to improve runtime. These 503 found addresses is a low number for estimating bitcoin balances of all countries worldwide. Because of this we are running our hadoop job again with more a extensive bitcoin address search that will hopefully result in (a lot) more results and thus better estimations. We expect this run to complete around the 2nd of September and will update the visualisation accordingly when that run has completed.
 
+From our current results we see that most of the bitcoins that belong to the addresses that we mined belong to people that live in Northern America and Europe. For us it was unexpected to see that the Asian countries have a very low amount of bitcoins attributed to them. This could be because these Asian webpages occur less frequently in the web crawl or because bitcoin addresses are written using different characters on these Asian webpages.
 
+According to our visualisation by far the most bitcoins are owned by Canadians. We expect this to be a distorted image due to the low number of extracted bitcoin addresses. The address that owns by far the most bitcoins of all extracted addresses is attributed to Canada. When more addresses are extracted by our new run we expect this to average out more.
+When we look at the average number of bitcoins per bitcoin address of each of the countries we also see that the European countries already show relatively higher numbers, despite Canada still remaining the country with the highest average number of bitcoins.
 
+### Process and Future Work
+
+During our work on this project we unfortunately lost a lot of time resolving issues with running our hadoop job on the complete CommonCrawl dataset on the Surfsara cluster. Because these problems only occurred on the complete dataset and because we were (one of) the first groups to do a complete run this was difficult and time-consuming to debug. These problems originated from cluster related configuration issues, such as a lack of memory of the Application Managers. We would like to thank Jeroen Schot (Surfsara) and Jeroen Vuurens (TU Delft) for helping us find a solution to these problems. We have hopefully been able to share our peers from the TU Delft IN4144 course some time by sharing our problems and their solutions on Piazza.
+
+Due to these problems we have not been able to spend as much time on developing the project as we would have liked. In this section we discuss some features that we would have like to have added to the final result:
+
+* **Incorporate Bitcoin Transactions into the Visualisation.** By including transactions between mined bitcoin address in the results of the hadoop job we would have been able to visualise the direct flows of bitcoins between countries. It would be interesting to see which companies do most bitcoin trading with each other.
+* **Improve Bitcoin Address miner** As we have seen from our initial results, the number of bitcoin addresses that we extract needs to be large to allow for good estimations. Especially given the fact that many addresses can not be attributed to a country and are therefore not usable in our visualisation. Hopefully our second run that inspects each word in the content will yield many more results, but we believe that a more efficient and thorough bitcoin miner can be developed. For example: bitcoin addresses are frequently shared using QR codes. If we would be able to read these it can increase the number of results.
+* **Improve country attribution** Currently the domain extension of a webpage plays a major role in country determination. Because of this method all bitcoin addresses found on for example .com websites can not be used for the visualisation. A more sophisticated method for attributing addresses to countries can improve the accuracy of country attribution and result in fewer discarded addresses. An example approach could be training a classifier that determines bitcoin address country based on the domain extension, language of the surrounding content, ip trace of recent transactions and potentially more features.
